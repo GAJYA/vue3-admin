@@ -1,13 +1,64 @@
-<script setup lang="ts">
-import { ref, defineProps } from 'vue'
+<script lang="ts">
+import { ref, defineComponent, PropType, onMounted } from 'vue'
 
-defineProps<{ msg: string }>()
+interface User {
+  name: string,
+  age: number
+}
 
-const count = ref(0)
+export default defineComponent({
+  // type inference enabled
+  props: {
+    msg: {
+      type: String,
+      required: true
+    },
+    sum: {
+      type: Number,
+      required: true
+    },
+    obj: {
+      type: Object as PropType<User>,
+      default: () => {}
+    }
+  },
+  setup (props) {
+    // props.obj.name
+    // props.message
+    const count = ref(0)
+    // const foo = ref(null)
+    // foo.value = {
+    //   a: 1
+    // }
+    // 通过泛型+联合类型做类型推断
+    const foo = ref<{
+      a: number,
+      b: string
+    } | null>(null)
+    foo.value = {
+      a: 1,
+      b: '1'
+    }
+    const result = props.msg.split('') // correct, 'message' is typed as a string
+    // const filtered = props.msg.filter(p => p.value) // an error will be thrown: Property 'filter' does not exist on type 'string'
+    const title = ref<HTMLHeadElement | null>(null) // 告诉ts将来可能是什么类型
+    onMounted(() => {
+      console.log(title.value)
+    })
+    return {
+      count,
+      result,
+      // filtered,
+      title
+    }
+  }
+})
 </script>
 
 <template>
-  <h1>{{ msg }}</h1>
+  <h1 ref="title">
+    {{ msg }}
+  </h1>
 
   <p>
     Recommended IDE setup:
