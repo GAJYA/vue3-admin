@@ -29,6 +29,15 @@ export default defineComponent({
     :sum="1"
   />
   <Abc />
+  <router-link to="/">
+    Home
+  </router-link>
+  <router-link to="/login">
+    login
+  </router-link>
+  <!-- 路由出口 -->
+  <!-- 路由匹配到的组件将渲染在这里 -->
+  <router-view />
 </template>
 
 <style>

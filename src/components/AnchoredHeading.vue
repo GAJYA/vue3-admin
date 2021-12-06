@@ -1,6 +1,6 @@
 <template>
   <abc />
-  <foo />
+  <foo msg="foo" />
 </template>
 
 <script lang="tsx" setup>
