@@ -1,4 +1,23 @@
-<script lang="ts">
+<!-- 组合式API语法糖： script setup -->
+
+<script setup lang="ts">
+import { ref, defineProps } from 'vue'
+const props = defineProps({
+  msg: {
+    type: String,
+    default: ''
+  }
+})
+
+const count = ref(100)
+
+const increment = () => {
+  count.value++
+}
+
+</script>
+
+<!-- <script lang="ts">
 import { ref, defineComponent, PropType, onMounted } from 'vue'
 
 interface User {
@@ -53,11 +72,11 @@ export default defineComponent({
     }
   }
 })
-</script>
+</script> -->
 
 <template>
   <h1 ref="title">
-    {{ msg }}
+    {{ props.msg }}
   </h1>
 
   <p>
@@ -91,7 +110,7 @@ export default defineComponent({
 
   <button
     type="button"
-    @click="count++"
+    @click="increment"
   >
     count is: {{ count }}
   </button>
