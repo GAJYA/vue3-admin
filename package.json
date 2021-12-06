@@ -9,6 +9,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@vitejs/plugin-vue-jsx": "^1.3.0",
     "vue": "^3.2.16"
   },
   "devDependencies": {

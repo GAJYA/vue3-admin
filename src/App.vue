@@ -3,11 +3,13 @@
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import { defineComponent, ref, onMounted } from 'vue'
 import HelloWorld from './components/HelloWorld.vue'
+import Abc from './components/AnchoredHeading.vue'
 
 export default defineComponent({
   name: 'App',
   components: {
-    HelloWorld
+    HelloWorld,
+    Abc
   },
   setup (props) {
     const helloWorld = ref<InstanceType<typeof HelloWorld> | null>(null)
@@ -20,15 +22,13 @@ export default defineComponent({
 </script>
 
 <template>
-  <img
-    alt="Vue logo"
-    src="./assets/logo.png"
-  >
+  <h1>App</h1>
   <HelloWorld
     ref="helloWorld"
     msg="Hello Vue 3 + TypeScript + Vite"
     :sum="1"
   />
+  <Abc />
 </template>
 
 <style>
