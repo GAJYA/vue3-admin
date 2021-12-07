@@ -1,7 +1,9 @@
 import axios, { AxiosRequestConfig } from 'axios'
+console.log(import.meta.env)
 
 const request = axios.create({
-  baseURL: 'https://shop.fed.lagou.com/api/admin/' // 基本路径
+  // 不同环境可能有不同地址
+  baseURL: import.meta.env.VITE_API_BASEURL // 基本路径
 })
 // request不支持泛型
 // request.get、post等方法支持响应数据泛型
