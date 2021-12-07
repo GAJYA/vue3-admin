@@ -23,6 +23,7 @@ export default defineComponent({
 
 <template>
   <h1>App</h1>
+  <el-button>点击我</el-button>
   <HelloWorld
     ref="helloWorld"
     msg="Hello Vue 3 + TypeScript + Vite"
