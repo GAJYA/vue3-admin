@@ -25,5 +25,14 @@ module.exports = {
     '@typescript-eslint'
   ],
   rules: {
-  }
+  },
+  // 重写规则
+  overrides: [
+    {
+      files: ['src/api/**/*.ts'],
+      rules: {
+        camelcase: 'off'
+      }
+    }
+  ]
 }
