@@ -1,11 +1,5 @@
 <template>
   <h1>home</h1>
-  <p>{{ $store.state.count }}</p>
-  <p>{{ store.state.count }}</p>
-  <p class="box">
-    {{ $store.state }}
-  </p>
-  <img src="@/assets/logo.png">
 </template>
 
 <script lang="ts" setup>
@@ -18,11 +12,6 @@ console.log(store.state.count)
 
 <style lang="scss" scoped>
 // @import '@/styles/variables.scss';
-.box {
-  height: 200px;
-  width: 200px;
-  background-image: url(@/assets/logo.png);
-}
 p{
   color: $color;
 }
