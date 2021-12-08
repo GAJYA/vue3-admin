@@ -6,81 +6,83 @@
     default-active="2"
     text-color="#fff"
     router
-    @open="handleOpen"
-    @close="handleClose"
+    :collapse="$store.state.isCollapse"
   >
-    <el-sub-menu index="/">
+    <el-menu-item index="/">
+      <el-icon><IconMenu /></el-icon>
+      <span>主页</span>
+    </el-menu-item>
+    <el-sub-menu index="/product">
       <template #title>
-        <el-icon><location /></el-icon>
-        <span>Navigator One</span>
+        <el-icon><Location /></el-icon>
+        <span>商品</span>
       </template>
-      <el-menu-item-group title="Group One">
-        <el-menu-item index="1-1">
-          item one
-        </el-menu-item>
-        <el-menu-item index="1-2">
-          item one
-        </el-menu-item>
-      </el-menu-item-group>
-      <el-menu-item-group title="Group Two">
-        <el-menu-item index="1-3">
-          item three
-        </el-menu-item>
-      </el-menu-item-group>
-      <el-sub-menu index="1-4">
-        <template #title>
-          item four
-        </template>
-        <el-menu-item index="1-4-1">
-          item one
-        </el-menu-item>
-      </el-sub-menu>
+      <el-menu-item index="/product/product_list">
+        商品管理
+      </el-menu-item>
+      <el-menu-item index="/product/product_classify">
+        商品分类
+      </el-menu-item>
+      <!-- <el-menu-item-group title="Group Two"> -->
+      <el-menu-item index="/product/product_attr">
+        商品规格
+      </el-menu-item>
+      <el-menu-item index="/product/product_reply">
+        商品评论
+      </el-menu-item>
+      <!-- </el-menu-item-group> -->
     </el-sub-menu>
-    <el-menu-item index="2">
-      <el-icon><icon-menu /></el-icon>
-      <span>Navigator Two</span>
+    <el-sub-menu index="/order">
+      <template #title>
+        <el-icon><IconMenu /></el-icon>
+        <span>订单</span>
+      </template>
+      <el-menu-item index="/order/order_list">
+        订单管理
+      </el-menu-item>
+      <el-menu-item index="/order/offline">
+        下线订单
+      </el-menu-item>
+    </el-sub-menu>
+    <el-menu-item index="/media">
+      <el-icon><Document /></el-icon>
+      <span>媒体</span>
     </el-menu-item>
-    <el-menu-item
-      index="3"
-      disabled
-    >
-      <el-icon><document /></el-icon>
-      <span>Navigator Three</span>
-    </el-menu-item>
-    <el-menu-item index="4">
-      <el-icon><setting /></el-icon>
-      <span>Navigator Four</span>
-    </el-menu-item>
+    <el-sub-menu index="/permission">
+      <template #title>
+        <el-icon><Setting /></el-icon>
+        <span>权限</span>
+      </template>
+      <el-menu-item index="/permission/permission_role">
+        角色
+      </el-menu-item>
+      <el-menu-item index="/permission/permission_admin">
+        管理员
+      </el-menu-item>
+      <el-menu-item index="/permission/permission_rule">
+        权限规则
+      </el-menu-item>
+    </el-sub-menu>
   </el-menu>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
 import {
   Location,
   Document,
   Menu as IconMenu,
   Setting
 } from '@element-plus/icons'
+import { } from 'vue'
 
-export default defineComponent({
-  components: {
-    Location,
-    Document,
-    Setting,
-    IconMenu
-  },
-  setup () {
-    const handleOpen = (key, keyPath) => {
-      console.log(key, keyPath)
-    }
-    const handleClose = (key, keyPath) => {
-      console.log(key, keyPath)
-    }
-    return {
-      handleOpen,
-      handleClose
-    }
-  }
-})
 </script>
+
+<style>
+.el-menu {
+  border-right: null;
+}
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 200px;
+  min-height: 400px;
+}
+</style>

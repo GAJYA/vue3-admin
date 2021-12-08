@@ -25,6 +25,9 @@ module.exports = {
     '@typescript-eslint'
   ],
   rules: {
+    'vue/multi-word-component-names': ['error', { // vue3的规则，组件名必须由多个单词连接，在ignores里配置忽略的单词名
+      ignores: ['index']
+    }]
   },
   // 重写规则
   overrides: [
