@@ -69,7 +69,9 @@ import { reactive, ref, onMounted } from 'vue'
 import { getCaptcha, login } from '@/api/common'
 import type { IElForm, IFormRule } from '@/types/element-plus'
 import { useRouter } from 'vue-router'
+import { useStore } from '@/store/index'
 
+const store = useStore()
 const router = useRouter()
 const form = ref<IElForm | null>(null)
 const captchaSrc = ref('')
@@ -110,6 +112,8 @@ const handleSubmit = async () => {
     // 不管结果怎样都让loading停止
     loading.value = false
   })
+  // 把获取到的用户信息存储在vuex中
+  store.commit('setUser', data.user_info)
   console.log(data)
   router.replace({
     name: 'home'

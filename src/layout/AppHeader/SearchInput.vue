@@ -19,5 +19,9 @@ const input = ref('')
 
 <style lang="scss" scoped>
 // @import '@/styles/variables.scss';
-
+.el-input {
+  flex: 6;
+  max-width: 300px;
+  margin-right: 10px;
+}
 </style>

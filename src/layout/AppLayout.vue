@@ -14,7 +14,7 @@
             <SearchInput />
             <FullScreen />
             <NotifyInfo />
-            <p>admin</p>
+            <UserInfo />
           </div>
         </el-header>
         <el-main>
@@ -33,6 +33,7 @@ import Breadcrumb from './AppHeader/BreadCrumb.vue'
 import SearchInput from './AppHeader/SearchInput.vue'
 import FullScreen from './AppHeader/FullScreen.vue'
 import NotifyInfo from './AppHeader/NotifyInfo.vue'
+import UserInfo from './AppHeader/UserInfo.vue'
 
 </script>
 <style lang="scss" scoped>

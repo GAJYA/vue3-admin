@@ -25,5 +25,7 @@ const toggleFullScreen = () => {
 </script>
 
 <style lang="scss" scoped>
-
+  .el-icon{
+    margin: 0 10px;
+  }
 </style>
