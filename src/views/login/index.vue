@@ -68,11 +68,12 @@
 import { reactive, ref, onMounted } from 'vue'
 import { getCaptcha, login } from '@/api/common'
 import type { IElForm, IFormRule } from '@/types/element-plus'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useStore } from '@/store/index'
 
 const store = useStore()
 const router = useRouter()
+const route = useRoute()
 const form = ref<IElForm | null>(null)
 const captchaSrc = ref('')
 const user = reactive({
@@ -118,9 +119,12 @@ const handleSubmit = async () => {
     token: data.token
   })
   console.log(data)
-  router.replace({
-    name: 'home'
-  })
+  // 登录成功后跳转回原页面
+  let redirect = route.query.redirect || '/'
+  if (typeof redirect !== 'string') {
+    redirect = '/'
+  }
+  router.replace(redirect)
   // 处理响应
   console.log('handleSubmit')
 }

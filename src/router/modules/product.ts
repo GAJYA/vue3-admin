@@ -14,7 +14,8 @@ const routes: RouteRecordRaw[] = [
         name: 'product_list',
         component: () => import('@/views/product/list/index.vue'),
         meta: { // 自定义路由元数据
-          title: '商品列表'
+          title: '商品列表',
+          requiresAuth: true
         }
       },
       {
@@ -22,7 +23,8 @@ const routes: RouteRecordRaw[] = [
         name: 'product_classify',
         component: () => import('@/views/product/classify/index.vue'),
         meta: {
-          title: '商品分类'
+          title: '商品分类',
+          requiresAuth: true
         }
       },
       {

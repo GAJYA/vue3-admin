@@ -6,7 +6,8 @@ const routes: RouteRecordRaw[] = [
     name: '',
     component: RouterView,
     meta: {
-      title: '订单'
+      title: '订单',
+      requiresAuth: true // 需要权限才能访问
     },
     children: [
       {
