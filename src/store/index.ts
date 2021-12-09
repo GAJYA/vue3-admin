@@ -2,11 +2,13 @@
 import { InjectionKey } from 'vue'
 import { createStore, useStore as baseUseStore, Store } from 'vuex'
 import type { IUserInfo } from '@/api/types/common'
+import { getItem, setItem } from '@/utils/storage'
+import { USER } from '@/utils/constants'
 
 const state = {
   count: 0,
   isCollapse: false,
-  userInfo: JSON.parse(window.localStorage.getItem('userInfo') || 'null') as IUserInfo | null // 转换回对象或null
+  userInfo: getItem<IUserInfo>(USER) // 转换回对象或null
 }
 // 用type把state导出去供vuex.d.ts使用
 export type State = typeof state
@@ -26,7 +28,7 @@ export const store = createStore<State>({
     setUser (state, payload) {
       state.userInfo = payload
       // setItem只能存储字符串，直接存储对象，ts会报错
-      window.localStorage.setItem('userInfo', JSON.stringify(state.userInfo))
+      setItem(USER, payload)
     }
   }
 })
