@@ -67,11 +67,11 @@
 <script lang="ts" setup>
 import { reactive, ref, onMounted } from 'vue'
 import { getCaptcha, login } from '@/api/common'
-import { ElForm } from 'element-plus'
+import type { IElForm, IFormRule } from '@/types/element-plus'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const form = ref<InstanceType<typeof ElForm> | null>(null)
+const form = ref<IElForm | null>(null)
 const captchaSrc = ref('')
 const user = reactive({
   account: 'admin',
@@ -79,7 +79,7 @@ const user = reactive({
   imgcode: ''
 })
 const loading = ref(false)
-const rules = ref({
+const rules = ref<IFormRule>({
   account: [
     { required: true, message: '请输入账号', trigger: 'change' }
   ],
@@ -111,7 +111,9 @@ const handleSubmit = async () => {
     loading.value = false
   })
   console.log(data)
-  router.replace('/')
+  router.replace({
+    name: 'home'
+  })
   // 处理响应
   console.log('handleSubmit')
 }
