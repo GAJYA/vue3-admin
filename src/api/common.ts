@@ -24,3 +24,14 @@ export const getLogInfo = () => {
 //   return res.data.data
 // })
 }
+
+export const getCaptcha = () => {
+  return request<Blob>({
+    method: 'GET',
+    url: '/captcha_pro',
+    params: {
+      stamp: Date.now() // 保证每次请求的接口地址都是不一样的，避免缓存问题，因为每次调用的都是同一个接口地址，可能会遇到缓存的问题
+    },
+    responseType: 'blob' // 请求获取图片数据
+  })
+}

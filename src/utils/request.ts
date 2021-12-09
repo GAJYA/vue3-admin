@@ -32,6 +32,6 @@ request.interceptors.response.use(
 
 export default <T = any>(config: AxiosRequestConfig) => {
   return request(config).then(res => {
-    return res.data.data as T
+    return (res.data.data || res.data)as T // 返回的数据是json的情况下，可以这样写，如果是返回的图片等则不可以
   })
 }

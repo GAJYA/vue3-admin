@@ -6,6 +6,7 @@ export interface State {
     count: number,
     isCollapse: boolean
 }
+// Todo: 使用type把state导出去供vuex.d.ts使用
 
 export const key: InjectionKey<Store<State>> = Symbol('')
 
