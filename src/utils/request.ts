@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios'
+import { ElMessage } from 'element-plus'
 console.log(import.meta.env)
 
 const request = axios.create({
@@ -23,6 +24,12 @@ request.interceptors.request.use(
 request.interceptors.response.use(
   response => {
     // 统一处理响应错误，例如 token 无效、服务端异常等
+    // 服务使用的自定义状态码的情况
+    if (response.data.status && response.data.status !== 200) {
+      ElMessage.error(response.data.msg || '请求失败，请稍后重试')
+      // 手动返回一个Promise异常
+      return Promise.reject(response.data)
+    }
     return response
   },
   err => {

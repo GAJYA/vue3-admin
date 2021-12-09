@@ -106,7 +106,10 @@ const handleSubmit = async () => {
   // 验证通过，展示loading
   loading.value = true
   // 请求提交
-  const data = await login(user)
+  const data = await login(user).finally(() => {
+    // 不管结果怎样都让loading停止
+    loading.value = false
+  })
   console.log(data)
   router.replace('/')
   // 处理响应
