@@ -22,13 +22,15 @@ import { ArrowDown } from '@element-plus/icons'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { logout } from '@/api/common'
 import { useRouter } from 'vue-router'
+import { useStore } from '@/store/index'
 
+const store = useStore()
 const router = useRouter()
 const handleLogout = () => {
   // 退出提示
   ElMessageBox.confirm(
     '确认退出吗？',
-    'Warning',
+    '退出提示',
     {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
@@ -42,6 +44,8 @@ const handleLogout = () => {
         type: 'success',
         message: '退出成功'
       })
+      // 清除用户信息
+      store.commit('setUser', null)
       // 跳转回登录页
       router.push({
         name: 'login'

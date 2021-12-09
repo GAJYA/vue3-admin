@@ -113,7 +113,10 @@ const handleSubmit = async () => {
     loading.value = false
   })
   // 把获取到的用户信息存储在vuex中
-  store.commit('setUser', data.user_info)
+  store.commit('setUser', {
+    ...data.user_info,
+    token: data.token
+  })
   console.log(data)
   router.replace({
     name: 'home'

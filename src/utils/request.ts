@@ -1,7 +1,9 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import { ElMessage } from 'element-plus'
+import { store } from '@/store/index'
 console.log(import.meta.env)
 
+// const store = useStore()
 const request = axios.create({
   // 不同环境可能有不同地址
   baseURL: import.meta.env.VITE_API_BASEURL // 基本路径
@@ -13,6 +15,11 @@ const request = axios.create({
 request.interceptors.request.use(
   config => {
     // 统一设置用户身份 Token
+    console.log(store)
+    const user = store.state.userInfo
+    if (user && user.token && config.headers) {
+      config.headers.Authorization = 'Bearer ' + user.token
+    }
     return config
   },
   error => {

@@ -51,6 +51,6 @@ export const login = (data: {
 export const logout = () => {
   return request<ILoginResponse>({
     method: 'GET',
-    url: '/logout'
+    url: '/setting/admin/logout'
   })
 }

@@ -8,7 +8,7 @@ import { USER } from '@/utils/constants'
 const state = {
   count: 0,
   isCollapse: false,
-  userInfo: getItem<IUserInfo>(USER) // 转换回对象或null
+  userInfo: getItem<{token: string} & IUserInfo>(USER) // 转换回对象或null
 }
 // 用type把state导出去供vuex.d.ts使用
 export type State = typeof state
