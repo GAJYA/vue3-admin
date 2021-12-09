@@ -66,8 +66,12 @@
 
 <script lang="ts" setup>
 import { reactive, ref, onMounted } from 'vue'
-import { getCaptcha } from '@/api/common'
+import { getCaptcha, login } from '@/api/common'
+import { ElForm } from 'element-plus'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
+const form = ref<InstanceType<typeof ElForm> | null>(null)
 const captchaSrc = ref('')
 const user = reactive({
   account: 'admin',
@@ -94,6 +98,18 @@ const loadCaptcha = async () => {
   captchaSrc.value = URL.createObjectURL(data)
 }
 const handleSubmit = async () => {
+  // 表单验证
+  const valid = form.value?.validate()
+  if (!valid) {
+    return false
+  }
+  // 验证通过，展示loading
+  loading.value = true
+  // 请求提交
+  const data = await login(user)
+  console.log(data)
+  router.replace('/')
+  // 处理响应
   console.log('handleSubmit')
 }
 
