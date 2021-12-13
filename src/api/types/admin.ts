@@ -33,6 +33,6 @@ export interface ICreateAdmin {
     conf_pwd: string
     pwd: string
     real_name: string
-    roles: string
-    status: string
+    roles: number[]
+    status: 0 | 1
 }

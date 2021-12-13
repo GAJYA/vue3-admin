@@ -67,7 +67,7 @@
         width="80"
       />
       <el-table-column
-        prop="account"
+        prop="real_name"
         label="姓名"
       />
       <el-table-column
@@ -162,6 +162,7 @@
     v-model="dialogVisible"
     v-model:admin-id="adminId"
     @closed="adminId = null"
+    @success="handleSuccess"
   />
 </template>
 
@@ -179,12 +180,12 @@ const options = ref([
     label: '全部'
   },
   {
-    value: '显示',
-    label: '1'
+    value: 1,
+    label: '显示'
   },
   {
-    value: '不显示',
-    label: '0'
+    value: 0,
+    label: '不显示'
   }
 ])
 const list = ref<IListData[]>([])
@@ -236,6 +237,11 @@ const handleEdit = (id: number) => {
   dialogVisible.value = true
   adminId.value = id
   console.log(id)
+}
+// 点击确定后关闭弹窗，重新获取列表
+const handleSuccess = () => {
+  dialogVisible.value = false
+  loadList()
 }
 </script>
 

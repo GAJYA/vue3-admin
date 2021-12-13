@@ -3,6 +3,7 @@
  */
 import request from '@/utils/request'
 import type { IListParams, IListData, ICreateAdmin } from './types/admin'
+import type { IFormData } from './types/form'
 
 export const getAdminList = (params: IListParams) => {
   return request<{
@@ -73,9 +74,29 @@ export const getAdminInfo = () => {
 }
 
 // 管理员添加表单
-// export const createAdminForm = () => {
-//   return request<>({
-//     method: 'GET',
-//     url: 'setting/admin/create'
-//   })
-// }
+export const getRoles = () => {
+  return request<IFormData>({
+    method: 'GET',
+    url: 'setting/admin/create'
+  }).then(data => {
+    const roles = data.rules.find(item => item.field === 'roles')
+    if (roles && roles.options) {
+      return roles.options
+    } else {
+      return []
+    }
+  })
+}
+
+export const getAdmin = (id: number) => {
+  return request<IFormData>({
+    method: 'GET',
+    url: `setting/admin/${id}/edit`
+  }).then(data => {
+    const obj: Record<string, any> = {}
+    data.rules.forEach(item => {
+      obj[item.field] = item.value
+    })
+    return obj as ICreateAdmin
+  })
+}
