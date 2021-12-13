@@ -129,14 +129,20 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      v-model:currentPage="currentPage"
-      :page-sizes="[10, 20, 30, 40]"
-      :page-size="10"
+    <!-- <el-pagination
+      v-model:currentPage="listParams.page"
+      :page-sizes="[2, 3, 4]"
+      :page-size="listParams.limit"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="400"
+      :total="listCount"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
+    /> -->
+    <AppPagination
+      v-model:page="listParams.page"
+      v-model:limit="listParams.limit"
+      :list-count="listCount"
+      :load-list="loadList"
     />
   </el-card>
 </template>
@@ -145,6 +151,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import type { IListParams, IListData } from '@/api/types/admin'
 import { getAdminList } from '@/api/admin'
+import AppPagination from '@/components/Pagination/index.vue'
 
 const options = ref([
   {
@@ -161,10 +168,10 @@ const options = ref([
   }
 ])
 const list = ref<IListData[]>([])
-const currentPage = ref(4)
+const listCount = ref(0)
 const listParams = reactive({
   page: 1,
-  limit: 10,
+  limit: 2,
   name: '',
   roles: '',
   status: '' as IListParams['status'] // status必须加引号否则会读取为变量
@@ -175,15 +182,10 @@ onMounted(async () => {
 const loadList = async () => {
   const res = await getAdminList(listParams)
   list.value = res.list
+  listCount.value = res.count
 }
 const handleQuery = async () => {
   loadList()
-}
-const handleSizeChange = (val: number) => {
-  console.log(`${val} items per page`)
-}
-const handleCurrentChange = (val: number) => {
-  console.log(`current page: ${val}`)
 }
 const handleEdit = (index: number) => {
   console.log(index)
