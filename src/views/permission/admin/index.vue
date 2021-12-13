@@ -49,6 +49,7 @@
         <el-button
           class="button"
           type="primary"
+          @click="dialogVisible = true"
         >
           添加管理员
         </el-button>
@@ -120,7 +121,7 @@
           <el-button
             size="mini"
             type="text"
-            @click="handleEdit(scope.$index)"
+            @click="handleEdit(scope.row.id)"
           >
             编辑
           </el-button>
@@ -157,6 +158,11 @@
       :disabled="listLoading"
     />
   </el-card>
+  <AdminForm
+    v-model="dialogVisible"
+    v-model:admin-id="adminId"
+    @closed="adminId = null"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -165,6 +171,7 @@ import type { IListParams, IListData } from '@/api/types/admin'
 import { getAdminList, deleteAdmin, updateAdminStatus } from '@/api/admin'
 import AppPagination from '@/components/Pagination/index.vue'
 import { ElMessage } from 'element-plus'
+import AdminForm from './AdminForm.vue'
 
 const options = ref([
   {
@@ -190,6 +197,8 @@ const listParams = reactive({
   status: '' as IListParams['status'] // status必须加引号否则会读取为变量
 })
 const listLoading = ref(true)
+const dialogVisible = ref(false)
+const adminId = ref<number | null>(null)
 onMounted(async () => {
   loadList()
 })
@@ -223,8 +232,10 @@ const handleStatusChange = async (item: IListData) => {
   })
   ElMessage.success(`${item.status === 1 ? '启用' : '禁用'}成功`)
 }
-const handleEdit = (index: number) => {
-  console.log(index)
+const handleEdit = (id: number) => {
+  dialogVisible.value = true
+  adminId.value = id
+  console.log(id)
 }
 </script>
 
