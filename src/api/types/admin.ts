@@ -24,6 +24,7 @@ export interface IListData {
     is_del: 0 | 1
     _add_time:string
     _last_time: string
+    statusLoading?: boolean
 }
 
 // 管理员添加

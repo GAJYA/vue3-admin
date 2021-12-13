@@ -106,8 +106,10 @@
             v-model="scope.row.status"
             active-color="#13ce66"
             inactive-color="#ff4949"
-            active-value="1"
-            inactive-value="0"
+            :active-value="1"
+            :inactive-value="0"
+            :loading="scope.row.statusLoading"
+            @change="handleStatusChange(scope.row)"
           />
         </template>
       </el-table-column>
@@ -160,7 +162,7 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import type { IListParams, IListData } from '@/api/types/admin'
-import { getAdminList, deleteAdmin } from '@/api/admin'
+import { getAdminList, deleteAdmin, updateAdminStatus } from '@/api/admin'
 import AppPagination from '@/components/Pagination/index.vue'
 import { ElMessage } from 'element-plus'
 
@@ -196,6 +198,9 @@ const loadList = async () => {
   const res = await getAdminList(listParams).finally(() => {
     listLoading.value = false
   })
+  res.list.forEach(item => {
+    item.statusLoading = false // 管理员状态修改时的loading
+  })
   list.value = res.list
   listCount.value = res.count
 }
@@ -209,6 +214,14 @@ const handleDelete = async (id: number) => {
     type: 'success'
   })
   loadList()
+}
+
+const handleStatusChange = async (item: IListData) => {
+  item.statusLoading = true
+  await updateAdminStatus(item.id, item.status).finally(() => {
+    item.statusLoading = false
+  })
+  ElMessage.success(`${item.status === 1 ? '启用' : '禁用'}成功`)
 }
 const handleEdit = (index: number) => {
   console.log(index)
