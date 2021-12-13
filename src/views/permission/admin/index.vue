@@ -9,6 +9,7 @@
       ref="form"
       inline="true"
       :model="listParams"
+      :disabled="listLoading"
       @submit.prevent="handleQuery"
     >
       <el-form-item />
@@ -57,6 +58,7 @@
       :data="list"
       stripe
       style="width: 100%"
+      v-loading="listLoading"
     >
       <el-table-column
         prop="id"
@@ -120,12 +122,19 @@
           >
             编辑
           </el-button>
-          <el-button
-            size="mini"
-            type="text"
+          <el-popconfirm
+            title="确定要删除当前内容吗？"
+            @confirm="handleDelete(scope.row.id)"
           >
-            删除
-          </el-button>
+            <template #reference>
+              <el-button
+                size="mini"
+                type="text"
+              >
+                删除
+              </el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -143,6 +152,7 @@
       v-model:limit="listParams.limit"
       :list-count="listCount"
       :load-list="loadList"
+      :disabled="listLoading"
     />
   </el-card>
 </template>
@@ -150,8 +160,9 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import type { IListParams, IListData } from '@/api/types/admin'
-import { getAdminList } from '@/api/admin'
+import { getAdminList, deleteAdmin } from '@/api/admin'
 import AppPagination from '@/components/Pagination/index.vue'
+import { ElMessage } from 'element-plus'
 
 const options = ref([
   {
@@ -176,15 +187,27 @@ const listParams = reactive({
   roles: '',
   status: '' as IListParams['status'] // status必须加引号否则会读取为变量
 })
+const listLoading = ref(true)
 onMounted(async () => {
   loadList()
 })
 const loadList = async () => {
-  const res = await getAdminList(listParams)
+  listLoading.value = true
+  const res = await getAdminList(listParams).finally(() => {
+    listLoading.value = false
+  })
   list.value = res.list
   listCount.value = res.count
 }
 const handleQuery = async () => {
+  loadList()
+}
+const handleDelete = async (id: number) => {
+  await deleteAdmin(id)
+  ElMessage({
+    message: '已成功删除',
+    type: 'success'
+  })
   loadList()
 }
 const handleEdit = (index: number) => {
