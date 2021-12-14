@@ -160,7 +160,7 @@ const list = ref<IRoleData[]>([])
 const listCount = ref(0)
 const listParams = reactive({
   page: 1,
-  limit: 2,
+  limit: 10,
   role_name: '',
   status: '' as IRoleParams['status'] // status必须加引号否则会读取为变量
 })

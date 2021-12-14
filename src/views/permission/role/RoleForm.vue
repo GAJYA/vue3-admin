@@ -53,7 +53,7 @@
 <script lang="ts" setup>
 import AppDialogForm from '@/components/DialogForm/index.vue'
 import type { PropType } from 'vue'
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import type { IElForm, IFormRule, IElTree } from '@/types/element-plus'
 import type { IRoleMenu } from '@/api/types/role'
 import { getRolePermission, saveRole, getRoleInfo } from '@/api/role'
@@ -96,14 +96,29 @@ const loadRolePermission = async () => {
 
 const loadRoleInfo = async () => {
   if (!props.roleId) return
-  const data = await getRoleInfo(props.roleId)
-  menus.value = data.menus
+  const { role, menus: menusData } = await getRoleInfo(props.roleId)
+  menus.value = menusData
+  // 获取到DOM元素后再进行赋值
+  await nextTick()
+  formData.value.role_name = role.role_name
+  formData.value.status = role.status
+  setDefaultCheckbox(role.rules.split(',').map(item => Number.parseInt(item)))
+}
+const setDefaultCheckbox = (menus: number[]) => {
+  menus.forEach(item => {
+    // 判断是否是子节点，如果是子节点再选中
+    const node = tree.value?.getNode(item)
+    if (node && node.isLeaf) {
+      // 设置选中状态
+      tree.value?.setChecked(item, true, true)
+    }
+  })
 }
 const handleDialogOpen = () => {
   formLoading.value = true
-  Promise.all([loadRolePermission(), loadRoleInfo()]).finally(() => {
-    formLoading.value = false
-  })
+  props.roleId
+    ? loadRoleInfo().finally(() => { formLoading.value = false })
+    : loadRolePermission().finally(() => { formLoading.value = false })
 }
 const handleDialogClosed = () => {
   emit('update:role-id', 0)

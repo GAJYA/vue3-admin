@@ -17,7 +17,7 @@ export const getRoleList = (params: IRoleParams) => {
    })
 }
 
-// 保存新建角色或编辑角色
+// 保存新建角色或编辑角色 id值为0时候为新建角色
 export const saveRole = (id: number, data: {
     role_name: string
     status: 0 | 1
