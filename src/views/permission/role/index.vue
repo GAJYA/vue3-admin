@@ -129,7 +129,7 @@
   <RoleForm
     v-model="dialogVisible"
     v-model:role-id="roleId"
-    @closed="roleId = null"
+    @closed="roleId = 0"
     @success="handleSuccess"
   />
 </template>
@@ -166,7 +166,7 @@ const listParams = reactive({
 })
 const listLoading = ref(true)
 const dialogVisible = ref(false)
-const roleId = ref<number | null>(null)
+const roleId = ref(0)
 onMounted(async () => {
   loadList()
 })

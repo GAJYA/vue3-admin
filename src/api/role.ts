@@ -18,10 +18,10 @@ export const getRoleList = (params: IRoleParams) => {
 }
 
 // 保存新建角色或编辑角色
-export const createRole = (id: number | null, data: {
+export const saveRole = (id: number, data: {
     role_name: string
-    status: string
-    checked_menus: string
+    status: 0 | 1
+    checked_menus: number[]
 }) => {
   return request({
     method: 'POST',
