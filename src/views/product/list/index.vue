@@ -14,7 +14,7 @@
       <el-form-item />
       <el-form-item label="商品分类">
         <el-select
-          v-model="listParams.status"
+          v-model="listParams.cate_id"
           placeholder="请选择"
         >
           <el-option
@@ -29,7 +29,7 @@
         <el-col :span="12">
           <el-input
             size="medium"
-            v-model="listParams.role_name"
+            v-model="listParams.store_name"
             clearable
             placeholder="请输入商品名称关键字"
           >
@@ -106,30 +106,37 @@
         label="商品ID"
       />
       <el-table-column
-        prop="role_name"
         label="商品图片"
-      />
+      >
+        <template #default="props">
+          <img
+            :src="props.row.image"
+            width="100"
+            height="100"
+          >
+        </template>
+      </el-table-column>
       <el-table-column
-        prop="rules"
+        prop="store_name"
         label="商品名称"
-        min-width="150"
+        min-width="100"
         show-overflow-tooltip
       />
       <el-table-column
-        prop="role_name"
+        prop="price"
         label="商品售价"
       />
       <el-table-column
-        prop="role_name"
+        prop="sales"
         label="销量"
         sortable
       />
       <el-table-column
-        prop="role_name"
+        prop="postage"
         label="库存"
       />
       <el-table-column
-        prop="role_name"
+        prop="sort"
         label="排序"
       />
       <el-table-column
@@ -138,7 +145,7 @@
       >
         <template #default="scope">
           <el-switch
-            v-model="scope.row.status"
+            v-model="scope.row.is_show"
             active-color="#13ce66"
             inactive-color="#ff4949"
             active-text="上架"
@@ -202,8 +209,9 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
-import type { IRoleParams, IRoleData } from '@/api/types/role'
-import { getRoleList, deleteRole, updateRoleStatus } from '@/api/role'
+import type { IProductData } from '@/api/types/product'
+import { getProductList, deleteProduct, updateProductStatus } from '@/api/product'
+// import { getProductList, deleteProduct, updateProductStatus, getProductClassify } from '@/api/product'
 import AppPagination from '@/components/Pagination/index.vue'
 import { ElMessage } from 'element-plus'
 import RoleForm from './ProductForm.vue'
@@ -223,24 +231,32 @@ const options = ref([
     label: '不显示'
   }
 ])
-const list = ref<IRoleData[]>([])
+const list = ref<IProductData[]>([])
 const listCount = ref(0)
 const listParams = reactive({
   page: 1,
   limit: 10,
-  role_name: '',
-  status: '' as IRoleParams['status'] // status必须加引号否则会读取为变量
+  store_name: '',
+  sales: 1,
+  cate_id: '5',
+  type: 0
 })
 const listLoading = ref(true)
 const dialogVisible = ref(false)
 const roleId = ref(0)
 const radio = ref(3)
 onMounted(async () => {
+  loadProductClassify()
   loadList()
 })
+const loadProductClassify = async () => {
+  // const res = await getProductClassify(1)
+  // console.log(res)
+  console.log('clsssify')
+}
 const loadList = async () => {
   listLoading.value = true
-  const res = await getRoleList(listParams).finally(() => {
+  const res = await getProductList(listParams).finally(() => {
     listLoading.value = false
   })
   res.list.forEach(item => {
@@ -253,7 +269,7 @@ const handleQuery = async () => {
   loadList()
 }
 const handleDelete = async (id: number) => {
-  await deleteRole(id)
+  await deleteProduct(id)
   ElMessage({
     message: '已成功删除',
     type: 'success'
@@ -261,12 +277,12 @@ const handleDelete = async (id: number) => {
   loadList()
 }
 
-const handleStatusChange = async (item: IRoleData) => {
+const handleStatusChange = async (item: IProductData) => {
   item.statusLoading = true
-  await updateRoleStatus(item.id, item.status).finally(() => {
+  await updateProductStatus(item.id, item.is_show).finally(() => {
     item.statusLoading = false
   })
-  ElMessage.success(`${item.status === 1 ? '启用' : '禁用'}成功`)
+  ElMessage.success(`${item.is_show === 1 ? '启用' : '禁用'}成功`)
 }
 const handleEdit = (id: number) => {
   dialogVisible.value = true

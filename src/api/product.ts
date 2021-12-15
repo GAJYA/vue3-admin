@@ -2,8 +2,16 @@
  * 商品相关接口
  */
 import request from '@/utils/request'
-import type { IProductParams, IProductQuery, IProductData } from './types/product'
+import type {
+  IProductParams,
+  IProductQuery,
+  IProductData, IProductClassify, IGenerateAttr, IRuleClass, IAttrList, IRuleDetail
+} from './types/product'
 // import type { IFormData } from './types/form'
+
+/**
+ * -----------------------商品列表----------------------
+*/
 
 // 1分钟保存一次数据
 export const saveProductCache = () => {
@@ -14,9 +22,16 @@ export const saveProductCache = () => {
 }
 
 // 删除商品草稿
-export const deleteProductCache = (id: number) => {
+export const deleteProductCache = () => {
   return request({
     method: 'DELETE',
+    url: '/product/cache'
+  })
+}
+// 获取退出是未保存数据
+export const getProductCache = () => {
+  return request({
+    method: 'GET',
     url: '/product/cache'
   })
 }
@@ -92,3 +107,173 @@ export const getProductInfo = (id: number) => {
     url: `/product/product/${id}`
   })
 }
+
+// 检测活动存在
+export const checkActivity = (id: number) => {
+  return request({
+    method: 'GET',
+    url: `/product/product/check_activity/${id}`
+  })
+}
+
+// 生成属性
+export const generateAttr = (id: number, type: 0 | 1, data: {
+  attrs: string
+}) => {
+  return request<IGenerateAttr[]>({
+    method: 'POST',
+    url: `/product/generate_attr/${id}/${type}`,
+    data
+  })
+}
+
+// 获取上传密钥
+export const getTempKeys = () => {
+  return request({
+    method: 'GET',
+    url: '/product/product/get_temp_keys'
+  })
+}
+
+// 获取商品分类列表
+export const getProductClassify = (type: number) => {
+  return request<IProductClassify[]>({
+    method: 'GET',
+    url: `/product/category/cascader_list/${type}`
+  })
+}
+
+// 获取商品表单头
+export const getTypeHeader = () => {
+  return request<{
+    list: {
+      type: number
+      name: string
+    }[]
+    count: number
+  }>({
+    method: 'GET',
+    url: '/product/product/type_header'
+  })
+}
+
+// 获取商品详情描述
+export const getGoodsField = (id: number) => {
+  return request({
+    method: 'GET',
+    url: `/goods/get_goods_field/${id}`
+  })
+}
+
+// 获取规则属性模板
+export const getRule = () => {
+  return request<IRuleClass[]>({
+    method: 'GET',
+    url: '/product/product/get_rule'
+  })
+}
+
+// 获取运费模板
+export const getRateTemplate = () => {
+  return request<{
+    id: number
+    name: string
+  }[]>({
+    method: 'GET',
+    url: '/product/product/get_template'
+  })
+}
+
+// 设置产品批量上架
+export const setProductShow = (params:{
+  ids: number[]
+}) => {
+  return request({
+    method: 'PUT',
+    url: '/product/product/product_show',
+    params
+  })
+}
+// 设置产品批量下架
+export const setProductUnshow = (params:{
+  ids: number[]
+}) => {
+  return request({
+    method: 'PUT',
+    url: '/product/product/product_unshow',
+    params
+  })
+}
+
+// 选择商品列表
+export const chooseProductList = (params: IProductQuery) => {
+  return request<{
+       list: IProductData[]
+       count: number
+     }>({
+       method: 'GET',
+       url: '/product/product/list',
+       params
+     })
+}
+
+/**
+ * -----------------------商品分类----------------------
+*/
+
+/**
+ * -----------------------商品规格----------------------
+*/
+// 保存新建或编辑
+export const saveAttr = (id: number, data: {
+  rule_name: string
+  spec: string
+}) => {
+  return request({
+    method: 'POST',
+    url: `/product/product/rule/${id}`,
+    data
+  })
+}
+
+// 列表
+export const attrList = (params: {
+  page: number
+limit: number
+  rule_name: string
+}) => {
+  return request<{
+       list: IAttrList[]
+       count: number
+     }>({
+       method: 'GET',
+       url: '/product/product/list',
+       params
+     })
+}
+
+// 删除
+export const deleteAttr = (data: {
+  ids: string
+  all: string
+  where: string
+}) => {
+  return request({
+    method: 'DELETE',
+    url: '/product/product/rule/delete',
+    data
+  })
+}
+
+// 规则详情
+export const getRuleDetail = (id: number) => {
+  return request<{
+       info: IRuleDetail
+     }>({
+       method: 'GET',
+       url: `/product/product/rule/${id}`
+     })
+}
+/**
+ * -----------------------商品评论----------------------
+*/

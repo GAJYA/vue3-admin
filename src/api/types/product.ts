@@ -40,61 +40,122 @@ export interface IProductParams {
 export interface IProductQuery {
     page: number
     limit: number
-    cate_id: number
+    cate_id: string
     type: number
     store_name: string
-    sales: string
+    sales: number
 }
 
 export interface IProductData {
-    id: number
-    mer_id: number
-    image: string
-    recommend_image: string
-    slider_image: string[]
-    store_name: string
-    store_info: string
-    keyword: string
+    activity: string
+    add_time: number
     bar_code: string
+    browse: number
     cate_id: string
-    price: string
-    vip_price: string
+    cate_name: string
+    code_path: string
+    collect: number
+    command_word: string
+    cost: string
+    ficti: number
+    give_integral: string
+    id: number
+    image: string
+    is_bargain: number | null
+    is_benefit: 0 | 1
+    is_best: 0 | 1
+    is_del: 0 | 1
+    is_good: 0 | 1
+    is_hot: 0 | 1
+    is_new: 0 | 1
+    is_postage: 0 | 1
+    is_seckill: 0 | 1
+    is_show: 0 | 1
+    is_sub: 0 | 1
+    is_vip: 0 | 1
+    keyword: string
+    label_id: string
+    likes: number
+    mer_id: number
+    mer_use: number
     ot_price: string
     postage: string
-    unit_name: string
-    sort: number
+    price: string
+    recommend_image: string
     sales: number
-    stock: string
-    is_show: number
-    is_hot: number
-    is_benefit: number
-    is_best: number
-    is_new: number
-    add_time: number
-    is_postage: number
-    is_del: number
-    mer_use: number
-    give_integral: string
-    cost: string
-    is_seckill: number
-    is_bargain: number
-    is_good: number
-    is_sub: number
-    is_vip: number
-    ficti: number
-    browse: number
-    code_path: string
+    slider_image: string[]
+    sort: number
     soure_link: string
-    video_link: string
-    temp_id: number
     spec_type: number
-    activity: string
     spu: string
-    label_id: string
-    command_word: string
-    collect: number
-    likes: number
-    visitor: number
-    cate_name: string
+    stock: string
     stock_attr: boolean
+    store_info: string
+    store_name: string
+    temp_id: number
+    unit_name: string
+    video_link: string
+    vip_price: string
+    visitor: number
+    statusLoading: boolean
+}
+
+export interface IProductClassify {
+    value: number
+    label: string
+    pid: number
+    children: IProductClassify[]
+}
+
+export interface IAttrClass {
+    value: string
+    detail: string[]
+}
+
+export interface IGenerateAttr {
+    info: {
+        attr: IAttrClass
+        value: {
+            bar_code: string
+            brokerage: number
+            brokerage_two: number
+            cost: number
+        }
+        detail:{
+            ot_price: number
+            pic: string
+            price: number
+            stock: number
+            vip_price: number
+            volume: number
+            weight: number
+        }[]
+        header: {
+            title: string
+            align: string
+            key: string
+            minWidth: number
+        }[]
+    }
+
+}
+
+export interface IRuleClass {
+    rule_name: string
+    rule_value: IAttrClass[]
+}
+
+export interface IAttrList {
+    id: number
+    rule_name: string
+    rule_value: string
+    attr_name: string
+    attr_value: string []
+}
+
+export interface IRuleDetail {
+    id: number
+    rule_name: string
+    rule_value: string
+    spec: IAttrClass
 }
