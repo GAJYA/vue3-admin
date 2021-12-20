@@ -5,6 +5,8 @@ import request from '@/utils/request'
 import type {
   IProductParams,
   IProductQuery,
+  IHeader,
+  ICategoryTree,
   IProductData, IProductClassify, IGenerateAttr, IRuleClass, IAttrList, IRuleDetail
 } from './types/product'
 // import type { IFormData } from './types/form'
@@ -146,10 +148,7 @@ export const getProductClassify = (type: number) => {
 // 获取商品表单头
 export const getTypeHeader = () => {
   return request<{
-    list: {
-      type: number
-      name: string
-    }[]
+    list: IHeader[]
     count: number
   }>({
     method: 'GET',
@@ -220,7 +219,13 @@ export const chooseProductList = (params: IProductQuery) => {
 /**
  * -----------------------商品分类----------------------
 */
-
+// 树形列表  0-仅顶级分类 1-所有分类
+export const getCategoryTree = (type: number) => {
+  return request<ICategoryTree[]>({
+    method: 'GET',
+    url: `/product/category/tree/${type}`
+  })
+}
 /**
  * -----------------------商品规格----------------------
 */

@@ -16,12 +16,13 @@
         <el-select
           v-model="listParams.cate_id"
           placeholder="请选择"
+          @change="loadList"
         >
           <el-option
             v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :key="item.id"
+            :label="item.html+item.cate_name"
+            :value="item.id"
           />
         </el-select>
       </el-form-item>
@@ -40,25 +41,19 @@
         </el-col>
       </el-form-item>
       <el-form-item label="商品类目">
-        <el-radio-group v-model="radio">
-          <el-radio :label="3">
-            全部
-          </el-radio>
-          <el-radio :label="6">
-            出售中的商品
-          </el-radio>
-          <el-radio :label="9">
-            仓库中的商品
+        <el-radio-group
+          v-model="radio"
+          @change="handleRadioChange"
+        >
+          <el-radio
+            v-for="item in radioGroup"
+            :key="item.type"
+            :label="item.type"
+          >
+            {{ item.name }}
+            {{ item.count?`(${item.count})`:'' }}
           </el-radio>
         </el-radio-group>
-      </el-form-item>
-      <el-form-item>
-        <el-button
-          type="submit"
-          @click="handleQuery"
-        >
-          查询
-        </el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -74,13 +69,15 @@
         </el-button>
         <el-button
           class="button"
-          @click="dialogVisible = true"
+          v-if="listParams.type === 2"
+          @click="handleProductShow"
         >
           批量上架
         </el-button>
         <el-button
           class="button"
-          @click="dialogVisible = true"
+          v-else
+          @click="handleProductUnShow"
         >
           批量下架
         </el-button>
@@ -91,6 +88,7 @@
       stripe
       style="width: 100%"
       v-loading="listLoading"
+      @selection-change="handleSelectionChange"
     >
       <el-table-column
         type="expand"
@@ -101,6 +99,10 @@
           <p>Address: {{ props.row.rules }}</p>
         </template>
       </el-table-column>
+      <el-table-column
+        type="selection"
+        width="35"
+      />
       <el-table-column
         prop="id"
         label="商品ID"
@@ -159,6 +161,7 @@
       </el-table-column>
       <el-table-column
         label="操作"
+        width="130"
       >
         <template #default="scope">
           <el-button
@@ -209,28 +212,15 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
-import type { IProductData } from '@/api/types/product'
-import { getProductList, deleteProduct, updateProductStatus } from '@/api/product'
+import type { IProductData, IHeader, ICategoryTree } from '@/api/types/product'
+import { getProductList, deleteProduct, updateProductStatus, getTypeHeader, getCategoryTree, setProductShow, setProductUnshow } from '@/api/product'
 // import { getProductList, deleteProduct, updateProductStatus, getProductClassify } from '@/api/product'
 import AppPagination from '@/components/Pagination/index.vue'
 import { ElMessage } from 'element-plus'
 import RoleForm from './ProductForm.vue'
 import { Search } from '@element-plus/icons-vue'
 
-const options = ref([
-  {
-    value: '',
-    label: '全部'
-  },
-  {
-    value: 1,
-    label: '显示'
-  },
-  {
-    value: 0,
-    label: '不显示'
-  }
-])
+const options = ref<ICategoryTree[]>([])
 const list = ref<IProductData[]>([])
 const listCount = ref(0)
 const listParams = reactive({
@@ -238,21 +228,34 @@ const listParams = reactive({
   limit: 10,
   store_name: '',
   sales: 1,
-  cate_id: '5',
-  type: 0
+  cate_id: '',
+  type: 0 // 商品类目
 })
+const radioGroup = ref<IHeader[]>([])
 const listLoading = ref(true)
 const dialogVisible = ref(false)
 const roleId = ref(0)
-const radio = ref(3)
+const radio = ref(0)
+const selectedIds = ref<number[]>([])
 onMounted(async () => {
   loadProductClassify()
   loadList()
+  loadHeader()
 })
 const loadProductClassify = async () => {
-  // const res = await getProductClassify(1)
-  // console.log(res)
-  console.log('clsssify')
+  const res = await getCategoryTree(1)
+  options.value = res
+  console.log('getCategoryTree', res)
+}
+const loadHeader = async () => {
+  const res = await getTypeHeader()
+  radioGroup.value = res.list
+  // 添加【全部】这个选项
+  radioGroup.value.splice(0, 0, {
+    type: 0,
+    name: '全部'
+  })
+  console.log('header:', res)
 }
 const loadList = async () => {
   listLoading.value = true
@@ -277,6 +280,24 @@ const handleDelete = async (id: number) => {
   loadList()
 }
 
+const handleRadioChange = async () => {
+  listParams.type = radio.value
+  loadList()
+}
+// 多选框选中的项
+const handleSelectionChange = async (val: IProductData[]) => {
+  selectedIds.value = val.map(item => item.id)
+}
+// 批量上架
+const handleProductShow = async () => {
+  await setProductShow({ ids: selectedIds.value })
+  loadList()
+}
+// 批量下架
+const handleProductUnShow = async () => {
+  await setProductUnshow({ ids: selectedIds.value })
+  loadList()
+}
 const handleStatusChange = async (item: IProductData) => {
   item.statusLoading = true
   await updateProductStatus(item.id, item.is_show).finally(() => {
@@ -284,6 +305,7 @@ const handleStatusChange = async (item: IProductData) => {
   })
   ElMessage.success(`${item.is_show === 1 ? '启用' : '禁用'}成功`)
 }
+
 const handleEdit = (id: number) => {
   dialogVisible.value = true
   roleId.value = id

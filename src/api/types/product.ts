@@ -159,3 +159,21 @@ export interface IRuleDetail {
     rule_value: string
     spec: IAttrClass
 }
+
+export interface IHeader {
+    type: number
+    name: string
+    count?: number
+}
+
+export interface ICategoryTree {
+    id: number
+    cate_name: string
+    html: string
+    add_time: string
+    big_pic: string
+    is_show: number
+    pic: string
+    pid: number
+    sort: number
+}
