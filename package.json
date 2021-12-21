@@ -16,7 +16,8 @@
     "nprogress": "^0.2.0",
     "vue": "^3.2.16",
     "vue-router": "^4.0.12",
-    "vuex": "^4.0.2"
+    "vuex": "^4.0.2",
+    "xlsx": "^0.17.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",

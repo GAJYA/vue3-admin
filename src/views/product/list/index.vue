@@ -81,6 +81,13 @@
         >
           批量下架
         </el-button>
+        <el-button
+          class="button"
+          :icon="Document"
+          @click="handleExportSheets"
+        >
+          导出表格
+        </el-button>
       </div>
     </template>
     <el-table
@@ -218,7 +225,7 @@ import { getProductList, deleteProduct, updateProductStatus, getTypeHeader, getC
 import AppPagination from '@/components/Pagination/index.vue'
 import { ElMessage } from 'element-plus'
 import RoleForm from './ProductForm.vue'
-import { Search } from '@element-plus/icons-vue'
+import { Search, Document } from '@element-plus/icons-vue'
 
 const options = ref<ICategoryTree[]>([])
 const list = ref<IProductData[]>([])
@@ -236,7 +243,7 @@ const listLoading = ref(true)
 const dialogVisible = ref(false)
 const roleId = ref(0)
 const radio = ref(0)
-const selectedIds = ref<number[]>([])
+const selectedItems = ref<IProductData[]>([])
 onMounted(async () => {
   loadProductClassify()
   loadList()
@@ -286,17 +293,32 @@ const handleRadioChange = async () => {
 }
 // 多选框选中的项
 const handleSelectionChange = async (val: IProductData[]) => {
-  selectedIds.value = val.map(item => item.id)
+  selectedItems.value = val
 }
 // 批量上架
 const handleProductShow = async () => {
-  await setProductShow({ ids: selectedIds.value })
+  await setProductShow({ ids: selectedItems.value.map(item => item.id) })
   loadList()
 }
 // 批量下架
 const handleProductUnShow = async () => {
-  await setProductUnshow({ ids: selectedIds.value })
+  await setProductUnshow({ ids: selectedItems.value.map(item => item.id) })
   loadList()
+}
+// 导出表格
+const handleExportSheets = async () => {
+  // 懒加载当前xlsx库，因为比较大，只在调用的时候才去加载，这样可以一定程度上减少页面加载缓慢的问题
+  const { jsonToExcel } = await import('@/utils/export-to-excel')
+  jsonToExcel({
+    data: selectedItems.value,
+    header: {
+      id: '编号',
+      name: '姓名',
+      number: '数量'
+    },
+    filename: '测试3.xlsx',
+    bookType: 'xlsx'
+  })
 }
 const handleStatusChange = async (item: IProductData) => {
   item.statusLoading = true
