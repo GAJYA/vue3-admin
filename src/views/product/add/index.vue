@@ -187,12 +187,6 @@
           </template> -->
             </el-space>
           </el-form-item>
-          <el-form-item
-            label="商品详情"
-            prop="description"
-          >
-            <app-text-editor v-model="product.description" />
-          </el-form-item>
         </el-form>
       </el-tab-pane>
       <!-- 商品详情 -->
@@ -200,13 +194,7 @@
         label="商品详情"
         name="second"
       >
-        <el-form>
-          <el-form-item label="富文本编辑器">
-            <el-input
-              type="textarea"
-            />
-          </el-form-item>
-        </el-form>
+        <app-text-editor v-model="product.description" />
       </el-tab-pane>
       <!-- 其他设置 -->
       <el-tab-pane
@@ -368,6 +356,8 @@ import type { IAttrList, ICategoryTree, IRuleDetail, IHeader } from '@/api/types
 import type { IElForm } from '@/types/element-plus'
 import { ElMessage } from 'element-plus'
 import { ArrowLeft } from '@element-plus/icons-vue'
+import AppTextEditor from '@/components/TextEditor/index.vue'
+
 // import AttrTable from './AttrTable.vue'
 // import AttrTemplate from './AttrTemplate.vue'
 // import AttrEdit from './AttrEdit.vue'
