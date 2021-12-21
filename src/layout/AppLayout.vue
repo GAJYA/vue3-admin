@@ -62,6 +62,7 @@ import UserInfo from './AppHeader/UserInfo.vue'
 .el-main {
   background-color: #e9eef3;
   color: var(--el-text-color-primary);
+  text-align: left;
 }
 
 .el-container {

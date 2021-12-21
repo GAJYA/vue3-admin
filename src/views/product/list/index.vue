@@ -63,7 +63,7 @@
         <el-button
           class="button"
           type="primary"
-          @click="dialogVisible = true"
+          @click="handleJump"
         >
           添加商品
         </el-button>
@@ -209,12 +209,6 @@
       :disabled="listLoading"
     />
   </el-card>
-  <RoleForm
-    v-model="dialogVisible"
-    v-model:role-id="roleId"
-    @closed="roleId = 0"
-    @success="handleSuccess"
-  />
 </template>
 
 <script lang="ts" setup>
@@ -224,9 +218,10 @@ import { getProductList, deleteProduct, updateProductStatus, getTypeHeader, getC
 // import { getProductList, deleteProduct, updateProductStatus, getProductClassify } from '@/api/product'
 import AppPagination from '@/components/Pagination/index.vue'
 import { ElMessage } from 'element-plus'
-import RoleForm from './ProductForm.vue'
 import { Search, Document } from '@element-plus/icons-vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const options = ref<ICategoryTree[]>([])
 const list = ref<IProductData[]>([])
 const listCount = ref(0)
@@ -332,10 +327,11 @@ const handleEdit = (id: number) => {
   dialogVisible.value = true
   roleId.value = id
 }
-// 点击确定后关闭弹窗，重新获取列表
-const handleSuccess = () => {
-  dialogVisible.value = false
-  loadList()
+const handleJump = async () => {
+// 跳转回登录页
+  router.push({
+    name: 'product_add'
+  })
 }
 </script>
 
@@ -347,11 +343,6 @@ const handleSuccess = () => {
 .card-header {
   display: flex;
   align-items: center;
-  text-align: left;
-}
-
-.el-form{
-  text-align: left;
 }
 
 </style>
