@@ -201,7 +201,7 @@
         label="其他设置"
         name="third"
       >
-        <el-form :inline="true">
+        <el-form>
           <el-form-item
             label="虚拟销量"
             prop="ficti"
@@ -316,14 +316,9 @@
           >
             <el-space>
               <!--
-              拖拽元素列表和 v-model 的数据必须一致
+              拖拽元素列表和 v-model 的数据必须一致，否则会出问题，对标签没有限制
              -->
-              <app-draggable
-                v-model="activities"
-                :options="{
-                  animation: 300
-                }"
-              >
+              <app-draggable v-model="activities">
                 <el-tag
                   v-for="item in activities"
                   :key="item.name"
@@ -357,16 +352,17 @@ import type { IElForm } from '@/types/element-plus'
 import { ElMessage } from 'element-plus'
 import { ArrowLeft } from '@element-plus/icons-vue'
 import AppTextEditor from '@/components/TextEditor/index.vue'
+import AppDraggable from '@/components/Draggable/index.vue'
 
 // import AttrTable from './AttrTable.vue'
 // import AttrTemplate from './AttrTemplate.vue'
 // import AttrEdit from './AttrEdit.vue'
 
 // const attrTpl = ref<IRuleDetail[]>([])
-const activeName = ref('first')
+const activeName = ref('third')
 const activities = ref([
-  { type: 'danger', name: '秒杀' },
   { type: 'info', name: '默认' },
+  { type: 'danger', name: '秒杀' },
   { type: 'warning', name: '砍价' },
   { type: 'success', name: '拼团' }
 ])
